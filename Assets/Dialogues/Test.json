@@ -1,1 +1,1 @@
-﻿{"inkVersion":21,"root":[["^Hello, My Name is Bob","\n","^How are you?","\n",["done",{"#f":5,"#n":"g-0"}],null],"done",{"#f":1}],"listDefs":{}}
+﻿{"inkVersion":21,"root":[[{"->":"test"},["done",{"#f":5,"#n":"g-0"}],null],"done",{"test":["#","^Name:Bob","/#","^Hello, My Name is Bob","\n","^How are you?","\n","end",{"#f":1}],"#f":1}],"listDefs":{}}
