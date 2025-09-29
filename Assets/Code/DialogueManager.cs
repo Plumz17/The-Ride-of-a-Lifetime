@@ -6,6 +6,9 @@ using UnityEngine.InputSystem;
 using System;
 using UnityEditor.IMGUI.Controls;
 using System.Collections;
+using NUnit.Framework;
+using Unity.VisualScripting;
+using UnityEngine.UI;
 
 public class DialogueManager : MonoBehaviour
 {
@@ -13,6 +16,7 @@ public class DialogueManager : MonoBehaviour
     [SerializeField] private TextAsset currentInkFile;
 
     [Header("Dialogue UI")]
+    [SerializeField] private Image characterImage;
     [SerializeField] private GameObject dialoguePanel;
     [SerializeField] private TMP_Text dialogueText;
     [SerializeField] private TMP_Text characterNameText;
@@ -20,10 +24,15 @@ public class DialogueManager : MonoBehaviour
     [Header("Dialogue Settings")]
     [SerializeField] private float dialogueSpeed = 0.05f;
 
+    [Header("Character Manager")]
+    [SerializeField] private CharacterManager characterManager;
+
     private InputActions inputActions;
 
     private Story story;
     private List<string> tags;
+    private bool isTyping = false;
+    private Coroutine TypingCoroutine;
 
     void Awake()
     {
@@ -44,6 +53,12 @@ public class DialogueManager : MonoBehaviour
 
     void Start()
     {
+        SetupDialogue();
+        HandleDialogue();
+    }
+
+    private void SetupDialogue()
+    {
         story = new Story(currentInkFile.text);
         tags = new List<string>();
     }
@@ -55,7 +70,13 @@ public class DialogueManager : MonoBehaviour
 
     private void HandleDialogue()
     {
-        if (story.canContinue)
+        if (isTyping)
+        {
+            CompleteSentence();
+            return;
+        }
+
+        if (story.canContinue && !isTyping)
         {
             AdvanceDialogue();
         }
@@ -74,8 +95,7 @@ public class DialogueManager : MonoBehaviour
     {
         string currentSentence = story.Continue();
         HandleTags();
-        StopAllCoroutines();
-        StartCoroutine(TypeSentence(currentSentence));
+        TypingCoroutine = StartCoroutine(TypeSentence(currentSentence));
     }
 
     private void HandleTags()
@@ -83,14 +103,14 @@ public class DialogueManager : MonoBehaviour
         tags = story.currentTags;
         foreach (string s in tags)
         {
-            Debug.Log(s);
             string tagName = s.Split(":")[0];
             string tagParam = s.Split(":")[1];
 
             switch (tagName.ToLower())
             {
-                case "name":
-                    characterNameText.text = tagParam;
+                case "char":
+
+                    SetCharacter(tagParam);
                     break;
                 default:
                     Debug.Log("Tag Not Found 404");
@@ -99,14 +119,34 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
+    private void SetCharacter(string id)
+    {
+        Sprite characterSprite = characterManager.GetCharacterData(id).characterImage;
+        string characterName = characterManager.GetCharacterData(id).characterName;
+        if (characterSprite != null)
+            characterImage.sprite = characterSprite;
+        if (characterName != null)
+            characterNameText.text = characterName;
+    }
+
+    private void CompleteSentence() //Instantly Complete Sentence
+    {
+        StopCoroutine(TypingCoroutine);
+        isTyping = false;
+        dialogueText.maxVisibleCharacters = int.MaxValue;
+    }
+
     IEnumerator TypeSentence(string sentence)
     {
-        dialogueText.text = "";
+        isTyping = true;
+        dialogueText.maxVisibleCharacters = 0;
+        dialogueText.text = sentence;
         foreach (char letter in sentence.ToCharArray())
         {
-            dialogueText.text += letter;
+            dialogueText.maxVisibleCharacters++;
             yield return new WaitForSeconds(dialogueSpeed);
         }
+        CompleteSentence();
     }
 }
 

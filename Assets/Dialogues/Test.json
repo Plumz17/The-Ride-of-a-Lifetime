@@ -1,1 +1,1 @@
-﻿{"inkVersion":21,"root":[[{"->":"test"},["done",{"#f":5,"#n":"g-0"}],null],"done",{"test":["#","^Name:Bob","/#","^Hello, My Name is Bob","\n","^How are you?","\n","end",{"#f":1}],"#f":1}],"listDefs":{}}
+﻿{"inkVersion":21,"root":[[{"->":"test"},["done",{"#f":5,"#n":"g-0"}],null],"done",{"test":["#","^char:avery","/#","^Hello there! My name is Avery, what brings you here?","\n","#","^char:mc","/#","^I... don't know...","\n","^I just kinda am.","\n","end",{"#f":1}],"#f":1}],"listDefs":{}}

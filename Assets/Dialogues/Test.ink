@@ -1,7 +1,10 @@
 -> test
 
 == test ==
-# Name:Bob
-Hello, My Name is Bob
-How are you?
+# char:avery
+Hello there! My name is Avery, what brings you here?
+
+# char:mc
+I... don't know...
+I just kinda am.
 -> END

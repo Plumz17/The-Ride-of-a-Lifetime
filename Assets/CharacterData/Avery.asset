@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 576b39d387c4b6a4ca8f1dd0ff32bbb4, type: 3}
+  m_Name: Avery
+  m_EditorClassIdentifier: 
+  characterName: Avery
+  characterImage: {fileID: -8768534978309899238, guid: be5dc4cb74b4c2e4c9797bf46eb2691c, type: 3}
