@@ -9,6 +9,7 @@ using System.Collections;
 using NUnit.Framework;
 using Unity.VisualScripting;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class DialogueManager : MonoBehaviour
 {
@@ -109,7 +110,6 @@ public class DialogueManager : MonoBehaviour
             switch (tagName.ToLower())
             {
                 case "char":
-
                     SetCharacter(tagParam);
                     break;
                 default:
@@ -121,12 +121,19 @@ public class DialogueManager : MonoBehaviour
 
     private void SetCharacter(string id)
     {
-        Sprite characterSprite = characterManager.GetCharacterData(id).characterImage;
-        string characterName = characterManager.GetCharacterData(id).characterName;
-        if (characterSprite != null)
-            characterImage.sprite = characterSprite;
-        if (characterName != null)
-            characterNameText.text = characterName;
+        Character character = characterManager.GetCharacterData(id);
+        if (character.characterName != null)
+            characterNameText.text = character.characterName;
+        if (character.characterImage != null)
+        {
+            characterImage.sprite = character.characterImage;
+            FocusCharacter();
+        }
+    }
+
+    private void FocusCharacter() {
+        characterImage.DOFade(1f, 0.1f);
+        characterImage.transform.DOScale(1.1f, 0.1f).SetEase(Ease.InOutBounce);
     }
 
     private void CompleteSentence() //Instantly Complete Sentence
