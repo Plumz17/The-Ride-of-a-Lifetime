@@ -1,34 +1,49 @@
 -> test
 
 == test ==
-#char:mc
+#show:winter
+#show:avery
+#show:mc
+#speak:mc
 Press Space to Continue
 
-# char:avery
+#speak:avery
 Hello there! My name is Avery, what brings you here?
 
-# char:mc
+#speak:mc
 I... don't know...
 I just kinda am.
 Where are we?
 
-# char:avery
-Welcome dear....
-To THE INFINITY TRAIN.
+#speak:winter
+Avery, don’t scare them right away.
 
-#char:mc
-Hey! Pretty sure that's copyrighted
+#speak:avery
+Scare them? I was being polite!
 
-#char:avery
-Pretty sure Owen Dennis can't hear us right now...
+#speak:winter
+Your “polite” is dramatic introductions and ominous pauses.
 
-#char:mc
-Who?
+#speak:mc
+Um… so… who are you?
 
-#char:avery
-Anyway, You take a look around
+#speak:winter
+Call me Winter. I’m the one keeping things from falling apart here.
 
-#char:mc
-Uhh... sure
+#speak:avery
+Pfft, as if. I do all the real explaining.
+
+#speak:mc
+Welcome to... what is this place, again?
+
+#speak:winter
+That’s for later. For now—
+Stay calm.
+
+#speak:avery
+Stay entertained, you mean!
+
+#speak:mc
+Uhh... sure...
 TO BE CONTINUED
 -> END

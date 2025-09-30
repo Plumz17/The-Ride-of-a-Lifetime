@@ -16,7 +16,6 @@ public class CharacterManager : MonoBehaviour
         foreach (Character c in availableCharacters)
         {
             availableCharactersDict.Add(c.characterName.ToLower(), c);
-            Debug.Log(c.characterName.ToLower());
         }
     }
 

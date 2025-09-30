@@ -17,7 +17,6 @@ public class DialogueManager : MonoBehaviour
     [SerializeField] private TextAsset currentInkFile;
 
     [Header("Dialogue UI")]
-    [SerializeField] private Image characterImage;
     [SerializeField] private GameObject dialoguePanel;
     [SerializeField] private TMP_Text dialogueText;
     [SerializeField] private TMP_Text characterNameText;
@@ -27,6 +26,7 @@ public class DialogueManager : MonoBehaviour
 
     [Header("Character Manager")]
     [SerializeField] private CharacterManager characterManager;
+    [SerializeField] private CharacterPortraitManager characterPortraitManager;
 
     private InputActions inputActions;
 
@@ -106,34 +106,22 @@ public class DialogueManager : MonoBehaviour
         {
             string tagName = s.Split(":")[0];
             string tagParam = s.Split(":")[1];
+            Character currentCharacter = characterManager.GetCharacterData(tagParam);
 
             switch (tagName.ToLower())
             {
-                case "char":
-                    SetCharacter(tagParam);
+                case "show":
+                    if (tagParam != "mc")
+                        characterPortraitManager.LoadPortrait(currentCharacter.characterImage);
+                    break;
+                case "speak":
+                    characterNameText.text = currentCharacter.characterName;
                     break;
                 default:
                     Debug.Log("Tag Not Found 404");
                     break;
             }
         }
-    }
-
-    private void SetCharacter(string id)
-    {
-        Character character = characterManager.GetCharacterData(id);
-        if (character.characterName != null)
-            characterNameText.text = character.characterName;
-        if (character.characterImage != null)
-        {
-            characterImage.sprite = character.characterImage;
-            FocusCharacter();
-        }
-    }
-
-    private void FocusCharacter() {
-        characterImage.DOFade(1f, 0.1f);
-        characterImage.transform.DOScale(1.1f, 0.1f).SetEase(Ease.InOutBounce);
     }
 
     private void CompleteSentence() //Instantly Complete Sentence
