@@ -111,10 +111,15 @@ public class DialogueManager : MonoBehaviour
             switch (tagName.ToLower())
             {
                 case "show":
-                    if (tagParam != "mc")
-                        characterPortraitManager.LoadPortrait(currentCharacter.characterImage);
+                    if (tagParam != "mc") 
+                        characterPortraitManager.LoadPortrait(currentCharacter.characterImage, tagParam);
                     break;
                 case "speak":
+                    if (tagParam != "mc")
+                    {
+                        characterPortraitManager.UnfocusAll();
+                        characterPortraitManager.FocusPortrait(currentCharacter.characterImage, tagParam);
+                    }
                     characterNameText.text = currentCharacter.characterName;
                     break;
                 default:

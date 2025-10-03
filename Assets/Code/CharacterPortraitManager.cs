@@ -1,15 +1,24 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class CharacterPortraitManager : MonoBehaviour
 {
     [SerializeField] GameObject[] characterPortraits;
+    
 
     [Header("Focus Settings")]
     [Tooltip("How Dark the Unfocus Sprite is, between 0 - 1")]
     [SerializeField] float unfocusStrength = 0.7f;
+    [SerializeField] float focusStrength = 1.1f;
 
-    private int noOfCharacters = 0;
+    private int noOfCharacters; 
+    private Dictionary<string, CharacterPortrait> activePortraits;
+
+    void Awake()
+    {
+        activePortraits = new Dictionary<string, CharacterPortrait>();
+    }
 
     void Start()
     {
@@ -19,12 +28,30 @@ public class CharacterPortraitManager : MonoBehaviour
         }
     }
 
-    public void LoadPortrait(Sprite characterSprite)
+    public void LoadPortrait(Sprite characterSprite, string id)
     {
-        CharacterPortrait currrentPortrait = characterPortraits[noOfCharacters].GetComponent<CharacterPortrait>();
+        noOfCharacters++;
+        CharacterPortrait currrentPortrait = characterPortraits[noOfCharacters - 1].GetComponent<CharacterPortrait>();
         currrentPortrait.gameObject.SetActive(true);
         currrentPortrait.Unfocus(unfocusStrength);
         currrentPortrait.SetPortrait(characterSprite);
-        noOfCharacters++;
+        activePortraits.Add(id, currrentPortrait);
+    }
+
+    public void FocusPortrait(Sprite characterSpirte, string id)
+    {
+        CharacterPortrait currrentPortrait = activePortraits[id].GetComponent<CharacterPortrait>();
+        currrentPortrait.Focus(focusStrength);
+    }
+
+    public void UnfocusAll()
+    {
+        foreach (var portrait in activePortraits.Values)
+        {
+            if (portrait != null && portrait.gameObject.activeSelf)
+            {
+                portrait.Unfocus(unfocusStrength);
+            }
+        }
     }
 }
