@@ -1,3 +1,4 @@
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,23 +20,22 @@ public class CharacterPortrait : MonoBehaviour
 
     public void Unfocus(float unfocusStrength)
     {
-        Color c = originalColor;
-        c.r *= unfocusStrength;
-        c.g *= unfocusStrength;
-        c.b *= unfocusStrength;
+        Color targetColor = new Color(originalColor.r * unfocusStrength,
+                                originalColor.g * unfocusStrength,
+                                originalColor.b * unfocusStrength);
+        Vector3 targetScale = new Vector3(1, 1, 1);
 
-        characterImage.color = new Color(c.r, c.g, c.b, 1f);
-        characterImage.rectTransform.localScale = new Vector3(1, 1, 1);
+        characterImage.DOColor(targetColor, 0.2f);
+        characterImage.rectTransform.DOScale(targetScale, 0.2f);
+        Debug.Log("UNFOCUSED!");
     }
 
     public void Focus(float focusStrength)
     {
-        characterImage.rectTransform.localScale *= focusStrength;
-        Color c = characterImage.color;
-        c.r *= 255;
-        c.g *= 255;
-        c.b *= 255;
+        Color targetColor = originalColor;
+        Vector3 targetScale = new Vector3(1.1f, 1.1f, 1.1f);
 
-        characterImage.color = new Color(c.r, c.g, c.b, 1f);
+        characterImage.DOColor(targetColor, 0.2f);
+        characterImage.rectTransform.DOScale(targetScale, 0.2f);
     }
 }

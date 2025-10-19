@@ -14,12 +14,13 @@ using DG.Tweening;
 public class DialogueManager : MonoBehaviour
 {
     [Header("Current Dialogue")]
-    [SerializeField] private TextAsset currentInkFile;
+    private TextAsset currentInkFile;
 
     [Header("Dialogue UI")]
     [SerializeField] private GameObject dialoguePanel;
     [SerializeField] private TMP_Text dialogueText;
     [SerializeField] private TMP_Text characterNameText;
+    [SerializeField] private Image backgroundImage;
 
     [Header("Dialogue Settings")]
     [SerializeField] private float dialogueSpeed = 0.05f;
@@ -50,6 +51,12 @@ public class DialogueManager : MonoBehaviour
     {
         inputActions.Player.Interact.started -= OnEPressed;
         inputActions.Player.Disable();
+    }
+
+    public void LoadCutscene(Cutscene currentCutscene)
+    {
+        currentInkFile = currentCutscene.inkFile;
+        backgroundImage.sprite = currentCutscene.backgroundImage;
     }
 
     void Start()

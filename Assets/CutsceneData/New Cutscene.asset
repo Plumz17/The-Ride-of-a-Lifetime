@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 678d6be83669e1942857729e23dbd3e1, type: 3}
+  m_Name: New Cutscene
+  m_EditorClassIdentifier: 
+  cutsceneID: 0
+  backgroundImage: {fileID: -4364034832326165938, guid: 0405e6ee0e1ac6f43857f32dc7eae07b, type: 3}
+  inkFile: {fileID: 4900000, guid: fd83402c31a4049498b96cd69b0edc48, type: 3}
