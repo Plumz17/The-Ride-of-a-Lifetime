@@ -17,7 +17,7 @@ public class CharacterPortraitManager : MonoBehaviour
     [Header("Easing Settings")]
     [SerializeField] private float easeDistance = 100;
     [SerializeField] private float easeDuration = 1.5f;
-    [SerializeField] private Ease easeType = Ease.InQuint;
+    [SerializeField] private float easeDelay = 1f;
 
 
     private int noOfCharacters; 
@@ -42,17 +42,9 @@ public class CharacterPortraitManager : MonoBehaviour
         CharacterPortrait currrentPortrait = characterPortraits[noOfCharacters - 1].GetComponent<CharacterPortrait>();
         currrentPortrait.gameObject.SetActive(true);
         currrentPortrait.SetPortrait(characterSprite);
-        currrentPortrait.Ease(easeDistance, easeDuration, easeType, unfocusStrength);
+        currrentPortrait.Ease(easeDistance, easeDuration, easeDelay, unfocusStrength);
         activePortraits.Add(id, currrentPortrait);
     }
-
-    // public void EaseChar()
-    // {
-    //     foreach (GameObject c in characterPortraits) {
-    //         CharacterPortrait currentPortrait = c.GetComponent<CharacterPortrait>(); 
-    //         currentPortrait.Ease(easeDistance, easeDuration, easeType, unfocusStrength);
-    //     }
-    // }
 
     public void FocusPortrait(Sprite characterSpirte, string id)
     {

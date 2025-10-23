@@ -565,7 +565,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &824963900
 RectTransform:
   m_ObjectHideFlags: 0
@@ -886,7 +886,7 @@ MonoBehaviour:
   focusStrength: 1.1
   easeDistance: 100
   easeDuration: 0.5
-  easeType: 14
+  easeDelay: 0.75
 --- !u!1 &1189703468
 GameObject:
   m_ObjectHideFlags: 0
@@ -962,7 +962,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1331586481
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1321,7 +1321,7 @@ MonoBehaviour:
   characterNameText: {fileID: 1759521567}
   backgroundImage: {fileID: 824963901}
   easeDistance: 1200
-  easeDuration: 1.5
+  easeDuration: 1
   easeType: 18
   dialogueSpeed: 0.03
   characterManager: {fileID: 1334326109}

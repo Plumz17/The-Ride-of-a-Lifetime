@@ -63,11 +63,12 @@ public class DialogueManager : MonoBehaviour
     {
         currentInkFile = currentCutscene.inkFile;
         backgroundImage.sprite = currentCutscene.backgroundImage;
-        StartCoroutine(Wait(currentCutscene.introDelay));
+        StartCoroutine(StartAfterDelay(currentCutscene.introDelay));
     }
 
-    void Start()
+    IEnumerator StartAfterDelay(float seconds)
     {
+        yield return new WaitForSeconds(seconds);
         SetupDialogue();
         HandleDialogue();
     }
@@ -76,11 +77,13 @@ public class DialogueManager : MonoBehaviour
     {
         story = new Story(currentInkFile.text);
         tags = new List<string>();
-        SetupUI();
+        StartCoroutine(EaseInDialoguePanel());
     }
 
-    private void SetupUI()
+    private IEnumerator EaseInDialoguePanel()
     {
+        yield return null; //Consider Force a layout rebuild immediately to remove slight stutter
+        dialoguePanel.SetActive(true);
         RectTransform panelTransform = dialoguePanel.GetComponent<RectTransform>();
         originalPanelPos = panelTransform.anchoredPosition;
         Vector2 hiddenPos = new Vector2(originalPanelPos.x, originalPanelPos.y - easeDistance);
@@ -91,7 +94,6 @@ public class DialogueManager : MonoBehaviour
     private void OnEPressed(InputAction.CallbackContext context)
     {
         HandleDialogue();
-        SetupUI();
     }
 
     private void HandleDialogue()
@@ -172,11 +174,6 @@ public class DialogueManager : MonoBehaviour
             yield return new WaitForSeconds(dialogueSpeed);
         }
         CompleteSentence();
-    }
-
-    IEnumerator Wait(float seconds)
-    {
-        yield return new WaitForSeconds(seconds);
     }
 }
 

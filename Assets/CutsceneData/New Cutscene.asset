@@ -15,3 +15,4 @@ MonoBehaviour:
   cutsceneID: 0
   backgroundImage: {fileID: -4364034832326165938, guid: 0405e6ee0e1ac6f43857f32dc7eae07b, type: 3}
   inkFile: {fileID: 4900000, guid: fd83402c31a4049498b96cd69b0edc48, type: 3}
+  introDelay: 1
