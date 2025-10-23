@@ -21,6 +21,12 @@ public class DialogueManager : MonoBehaviour
     [SerializeField] private TMP_Text dialogueText;
     [SerializeField] private TMP_Text characterNameText;
     [SerializeField] private Image backgroundImage;
+    private Vector2 originalPanelPos;
+
+    [Header("Easing Settings")]
+    [SerializeField] private float easeDistance = 1200;
+    [SerializeField] private float easeDuration = 1.5f;
+    [SerializeField] private Ease easeType = Ease.InQuint;
 
     [Header("Dialogue Settings")]
     [SerializeField] private float dialogueSpeed = 0.05f;
@@ -53,10 +59,11 @@ public class DialogueManager : MonoBehaviour
         inputActions.Player.Disable();
     }
 
-    public void LoadCutscene(Cutscene currentCutscene)
+    public void LoadCutscene(Cutscene currentCutscene) // Plays in VNManager OnSceneLoaded
     {
         currentInkFile = currentCutscene.inkFile;
         backgroundImage.sprite = currentCutscene.backgroundImage;
+        StartCoroutine(Wait(currentCutscene.introDelay));
     }
 
     void Start()
@@ -69,11 +76,22 @@ public class DialogueManager : MonoBehaviour
     {
         story = new Story(currentInkFile.text);
         tags = new List<string>();
+        SetupUI();
+    }
+
+    private void SetupUI()
+    {
+        RectTransform panelTransform = dialoguePanel.GetComponent<RectTransform>();
+        originalPanelPos = panelTransform.anchoredPosition;
+        Vector2 hiddenPos = new Vector2(originalPanelPos.x, originalPanelPos.y - easeDistance);
+        panelTransform.anchoredPosition = hiddenPos;
+        panelTransform.DOAnchorPos(originalPanelPos, easeDuration).SetEase(easeType);
     }
 
     private void OnEPressed(InputAction.CallbackContext context)
     {
         HandleDialogue();
+        SetupUI();
     }
 
     private void HandleDialogue()
@@ -143,7 +161,7 @@ public class DialogueManager : MonoBehaviour
         dialogueText.maxVisibleCharacters = int.MaxValue;
     }
 
-    IEnumerator TypeSentence(string sentence)
+    IEnumerator TypeSentence(string sentence) //Type each character
     {
         isTyping = true;
         dialogueText.maxVisibleCharacters = 0;
@@ -154,6 +172,11 @@ public class DialogueManager : MonoBehaviour
             yield return new WaitForSeconds(dialogueSpeed);
         }
         CompleteSentence();
+    }
+
+    IEnumerator Wait(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
     }
 }
 

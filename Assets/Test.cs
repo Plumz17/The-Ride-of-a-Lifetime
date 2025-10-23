@@ -12,6 +12,6 @@ public class Test : MonoBehaviour
 
     IEnumerator WaitFiveSeconds()
     {
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(2);
     }
 }

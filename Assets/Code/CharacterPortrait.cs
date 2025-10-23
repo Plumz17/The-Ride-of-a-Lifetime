@@ -6,11 +6,19 @@ public class CharacterPortrait : MonoBehaviour
 {
     private Image characterImage;
     private Color originalColor;
-    
+    private RectTransform rectTransform;
+    private Vector2 originalPos;
+
     void Awake()
     {
         characterImage = GetComponent<Image>();
-        originalColor = characterImage.color; 
+        rectTransform = GetComponent<RectTransform>();
+        originalColor = characterImage.color;
+    }
+
+    void Start()
+    {
+        originalPos = rectTransform.anchoredPosition;
     }
 
     public void SetPortrait(Sprite characterSprite)
@@ -37,5 +45,12 @@ public class CharacterPortrait : MonoBehaviour
 
         characterImage.DOColor(targetColor, 0.2f);
         characterImage.rectTransform.DOScale(targetScale, 0.2f);
+    }
+
+    public void Ease(float easeDistance, float easeDuration, Ease easeType)
+    {
+        Vector2 startPos = originalPos - new Vector2(easeDistance, 0);
+        rectTransform.anchoredPosition = startPos;
+        //rectTransform.DOAnchorPos(originalPos, easeDuration).SetEase(easeType);
     }
 }

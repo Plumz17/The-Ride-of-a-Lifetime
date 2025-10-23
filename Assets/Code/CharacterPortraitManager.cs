@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using DG.Tweening;
+
 
 public class CharacterPortraitManager : MonoBehaviour
 {
@@ -11,6 +13,12 @@ public class CharacterPortraitManager : MonoBehaviour
     [Tooltip("How Dark the Unfocus Sprite is, between 0 - 1")]
     [SerializeField] float unfocusStrength = 0.7f;
     [SerializeField] float focusStrength = 1.1f;
+
+    [Header("Easing Settings")]
+    [SerializeField] private float easeDistance = 100;
+    [SerializeField] private float easeDuration = 1.5f;
+    [SerializeField] private Ease easeType = Ease.InQuint;
+
 
     private int noOfCharacters; 
     private Dictionary<string, CharacterPortrait> activePortraits;
@@ -35,6 +43,7 @@ public class CharacterPortraitManager : MonoBehaviour
         currrentPortrait.gameObject.SetActive(true);
         currrentPortrait.Unfocus(unfocusStrength);
         currrentPortrait.SetPortrait(characterSprite);
+        currrentPortrait.Ease(easeDistance, easeDuration, easeType);
         activePortraits.Add(id, currrentPortrait);
     }
 

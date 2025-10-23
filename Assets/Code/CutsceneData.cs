@@ -8,4 +8,5 @@ public class Cutscene : ScriptableObject
     public int cutsceneID;
     public Sprite backgroundImage;
     public TextAsset inkFile;
+    public float introDelay;
 }
