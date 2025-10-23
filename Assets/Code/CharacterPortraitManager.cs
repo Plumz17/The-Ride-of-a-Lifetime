@@ -41,11 +41,18 @@ public class CharacterPortraitManager : MonoBehaviour
         noOfCharacters++;
         CharacterPortrait currrentPortrait = characterPortraits[noOfCharacters - 1].GetComponent<CharacterPortrait>();
         currrentPortrait.gameObject.SetActive(true);
-        currrentPortrait.Unfocus(unfocusStrength);
         currrentPortrait.SetPortrait(characterSprite);
-        currrentPortrait.Ease(easeDistance, easeDuration, easeType);
+        currrentPortrait.Ease(easeDistance, easeDuration, easeType, unfocusStrength);
         activePortraits.Add(id, currrentPortrait);
     }
+
+    // public void EaseChar()
+    // {
+    //     foreach (GameObject c in characterPortraits) {
+    //         CharacterPortrait currentPortrait = c.GetComponent<CharacterPortrait>(); 
+    //         currentPortrait.Ease(easeDistance, easeDuration, easeType, unfocusStrength);
+    //     }
+    // }
 
     public void FocusPortrait(Sprite characterSpirte, string id)
     {

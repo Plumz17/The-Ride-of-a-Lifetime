@@ -1,3 +1,4 @@
+using System.Collections;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,13 +12,19 @@ public class CharacterPortrait : MonoBehaviour
 
     void Awake()
     {
-        characterImage = GetComponent<Image>();
-        rectTransform = GetComponent<RectTransform>();
+        characterImage = GetComponentInChildren<Image>();
+        rectTransform = characterImage.GetComponent<RectTransform>();
         originalColor = characterImage.color;
     }
 
     void Start()
     {
+        StartCoroutine(GrabOriginalPos());
+    }
+
+    IEnumerator GrabOriginalPos()
+    {
+        yield return null; //Wait for one frame
         originalPos = rectTransform.anchoredPosition;
     }
 
@@ -35,7 +42,6 @@ public class CharacterPortrait : MonoBehaviour
 
         characterImage.DOColor(targetColor, 0.2f);
         characterImage.rectTransform.DOScale(targetScale, 0.2f);
-        Debug.Log("UNFOCUSED!");
     }
 
     public void Focus(float focusStrength)
@@ -47,10 +53,21 @@ public class CharacterPortrait : MonoBehaviour
         characterImage.rectTransform.DOScale(targetScale, 0.2f);
     }
 
-    public void Ease(float easeDistance, float easeDuration, Ease easeType)
+    public void Ease(float easeDistance, float easeDuration, Ease easeType, float unfocusStrength)
     {
-        Vector2 startPos = originalPos - new Vector2(easeDistance, 0);
+        Debug.Log("Eased");
+        Vector2 startPos = originalPos + new Vector2(easeDistance, 0);
         rectTransform.anchoredPosition = startPos;
-        //rectTransform.DOAnchorPos(originalPos, easeDuration).SetEase(easeType);
+
+        Color startColor = characterImage.color;
+        startColor.a = 0;
+        characterImage.color = startColor;
+        Color targetColor = new Color(originalColor.r * unfocusStrength,
+                                originalColor.g * unfocusStrength,
+                                originalColor.b * unfocusStrength);
+
+        Sequence seq = DOTween.Sequence();
+        seq.Append(rectTransform.DOAnchorPos(originalPos, easeDuration));
+        seq.Join(characterImage.DOColor(targetColor, easeDuration));
     }
 }
