@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using DG.Tweening;
 using Ink.Parsed;
 using UnityEditor.SceneManagement;
+using System.Linq;
 
 
 public class CharacterPortraitManager : MonoBehaviour
@@ -41,6 +42,8 @@ public class CharacterPortraitManager : MonoBehaviour
 
     public void LoadPortrait(Sprite characterSprite, string id)
     {
+        if (activePortraits.ContainsKey(id)) //Temporary fix
+            return;
         noOfCharacters++;
         CharacterPortrait currrentPortrait = characterPortraits[noOfCharacters - 1].GetComponent<CharacterPortrait>();
         currrentPortrait.gameObject.SetActive(true);
