@@ -10,6 +10,7 @@ using NUnit.Framework;
 using Unity.VisualScripting;
 using UnityEngine.UI;
 using DG.Tweening;
+using UnityEngine.SceneManagement;
 
 public class DialogueManager : MonoBehaviour
 {
@@ -41,6 +42,7 @@ public class DialogueManager : MonoBehaviour
     private List<string> tags;
     private bool isTyping = false;
     private Coroutine TypingCoroutine;
+    private string currentSpeaker = "";
 
     void Awake()
     {
@@ -77,12 +79,12 @@ public class DialogueManager : MonoBehaviour
     {
         story = new Story(currentInkFile.text);
         tags = new List<string>();
-        StartCoroutine(EaseInDialoguePanel());
+        EaseInDialoguePanel();
     }
 
-    private IEnumerator EaseInDialoguePanel()
+    private void EaseInDialoguePanel()
     {
-        yield return null; //Consider Force a layout rebuild immediately to remove slight stutter
+        LayoutRebuilder.ForceRebuildLayoutImmediate(dialoguePanel.GetComponent<RectTransform>()); //from ChatGPT lol
         dialoguePanel.SetActive(true);
         RectTransform panelTransform = dialoguePanel.GetComponent<RectTransform>();
         originalPanelPos = panelTransform.anchoredPosition;
@@ -116,7 +118,8 @@ public class DialogueManager : MonoBehaviour
 
     private void EndDialogue()
     {
-        Debug.Log("Dialogue Ended!");
+        
+        SceneManager.LoadScene("Game");
     }
 
     private void AdvanceDialogue()
@@ -142,10 +145,11 @@ public class DialogueManager : MonoBehaviour
                         characterPortraitManager.LoadPortrait(currentCharacter.characterImage, tagParam);
                     break;
                 case "speak":
-                    if (tagParam != "mc")
+                    if (tagParam != "mc" && tagParam != currentSpeaker)
                     {
                         characterPortraitManager.UnfocusAll();
                         characterPortraitManager.FocusPortrait(currentCharacter.characterImage, tagParam);
+                        currentSpeaker = tagParam;
                     }
                     characterNameText.text = currentCharacter.characterName;
                     break;
