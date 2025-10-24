@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 using DG.Tweening;
 using Ink.Parsed;
+using UnityEditor.SceneManagement;
 
 
 public class CharacterPortraitManager : MonoBehaviour
@@ -20,13 +21,14 @@ public class CharacterPortraitManager : MonoBehaviour
     [SerializeField] private float easeDuration = 1.5f;
     [SerializeField] private float easeDelay = 1f;
 
-
     private int noOfCharacters; 
     private Dictionary<string, CharacterPortrait> activePortraits;
 
     void Awake()
     {
+        Debug.Log(noOfCharacters);
         activePortraits = new Dictionary<string, CharacterPortrait>();
+        noOfCharacters = 0;
     }
 
     void Start()
@@ -35,12 +37,6 @@ public class CharacterPortraitManager : MonoBehaviour
         {
             i.SetActive(false);
         }
-    }
-
-    public void ClearCharacterPortraits()
-    {
-        activePortraits.Clear();
-        noOfCharacters = 0;
     }
 
     public void LoadPortrait(Sprite characterSprite, string id)

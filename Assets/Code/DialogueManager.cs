@@ -84,12 +84,10 @@ public class DialogueManager : MonoBehaviour
 
     private void EaseInDialoguePanel()
     {
-        //LayoutRebuilder.ForceRebuildLayoutImmediate(dialoguePanel.GetComponent<RectTransform>()); //from ChatGPT lol
         RectTransform panelTransform = dialoguePanelGroup.GetComponent<RectTransform>();
-        if (originalPanelPos == Vector2.zero)
+        if (originalPanelPos == Vector2.zero) //From ChatGPT lol
             originalPanelPos = panelTransform.anchoredPosition;
         Vector2 hiddenPos = new Vector2(originalPanelPos.x, originalPanelPos.y - easeDistance);
-        Debug.Log(originalPanelPos.y + easeDistance);
         panelTransform.anchoredPosition = hiddenPos;
         dialoguePanelGroup.alpha = 1;
         panelTransform.DOAnchorPos(originalPanelPos, easeDuration).SetEase(easeType);
@@ -102,6 +100,12 @@ public class DialogueManager : MonoBehaviour
 
     private void HandleDialogue()
     {
+        if (story == null)
+        {
+            Debug.LogWarning("HandleDialogue called before story was initialized!");
+            return;
+        }
+        
         if (isTyping)
         {
             CompleteSentence();
@@ -120,8 +124,6 @@ public class DialogueManager : MonoBehaviour
 
     private void EndDialogue()
     {
-        //characterPortraitManager.ClearCharacterPortraits();
-        //characterManager.ClearCharacters();
         SceneManager.LoadScene("Game");
     }
 
@@ -137,19 +139,31 @@ public class DialogueManager : MonoBehaviour
         tags = story.currentTags;
         foreach (string s in tags)
         {
-            string tagName = s.Split(":")[0];
-            string tagParam = s.Split(":")[1];
+            string[] parts = s.Split(':');
+
+            // Check if the tag has the expected "tagname:tagparam" format
+            if (parts.Length < 2)
+            {
+                Debug.LogWarning($"Skipping malformed Ink tag: {s}");
+                continue; // Skip to the next tag
+            }
+
+            string tagName = parts[0];
+            string tagParam = parts[1]; 
+            
             Character currentCharacter = characterManager.GetCharacterData(tagParam);
+            bool isMC = tagParam == "mc";
 
             switch (tagName.ToLower())
             {
                 case "show":
-                    if (tagParam != "mc") 
+                    Debug.Log(tagParam + " showed!");
+                    if (!isMC)
+                    {
                         characterPortraitManager.LoadPortrait(currentCharacter.characterImage, tagParam);
+                    }
                     break;
                 case "speak":
-                    Debug.Log("Speak");
-                    bool isMC = tagParam == "mc";
                     bool isSameSpeaker = tagParam == currentSpeaker;
                     if (isSameSpeaker) //To prevent focus from being triggered at the same char
                         break;

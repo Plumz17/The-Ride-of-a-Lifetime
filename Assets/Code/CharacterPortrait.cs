@@ -55,7 +55,6 @@ public class CharacterPortrait : MonoBehaviour
 
     public void Ease(float easeDistance, float easeDuration,  float easeDelay, float unfocusStrength)
     {
-        Debug.Log("Eased");
         Vector2 startPos = originalPos + new Vector2(easeDistance, 0);
         rectTransform.anchoredPosition = startPos;
 

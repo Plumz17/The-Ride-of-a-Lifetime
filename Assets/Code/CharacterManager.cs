@@ -11,12 +11,6 @@ public class CharacterManager : MonoBehaviour
         SetupCharacters();
     }
 
-    public void ClearCharacters()
-    {
-        availableCharacters = new Character[0];
-        availableCharactersDict.Clear();
-    }
-
     private void SetupCharacters() {
         availableCharactersDict = new Dictionary<string, Character>();
         foreach (Character c in availableCharacters)
