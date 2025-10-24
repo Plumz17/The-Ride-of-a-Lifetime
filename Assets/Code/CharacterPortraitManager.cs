@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using DG.Tweening;
+using Ink.Parsed;
 
 
 public class CharacterPortraitManager : MonoBehaviour
@@ -34,6 +35,12 @@ public class CharacterPortraitManager : MonoBehaviour
         {
             i.SetActive(false);
         }
+    }
+
+    public void ClearCharacterPortraits()
+    {
+        activePortraits.Clear();
+        noOfCharacters = 0;
     }
 
     public void LoadPortrait(Sprite characterSprite, string id)

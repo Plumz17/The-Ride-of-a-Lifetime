@@ -18,7 +18,7 @@ public class DialogueManager : MonoBehaviour
     private TextAsset currentInkFile;
 
     [Header("Dialogue UI")]
-    [SerializeField] private GameObject dialoguePanel;
+    [SerializeField] private CanvasGroup dialoguePanelGroup;
     [SerializeField] private TMP_Text dialogueText;
     [SerializeField] private TMP_Text characterNameText;
     [SerializeField] private Image backgroundImage;
@@ -84,12 +84,14 @@ public class DialogueManager : MonoBehaviour
 
     private void EaseInDialoguePanel()
     {
-        LayoutRebuilder.ForceRebuildLayoutImmediate(dialoguePanel.GetComponent<RectTransform>()); //from ChatGPT lol
-        dialoguePanel.SetActive(true);
-        RectTransform panelTransform = dialoguePanel.GetComponent<RectTransform>();
-        originalPanelPos = panelTransform.anchoredPosition;
+        //LayoutRebuilder.ForceRebuildLayoutImmediate(dialoguePanel.GetComponent<RectTransform>()); //from ChatGPT lol
+        RectTransform panelTransform = dialoguePanelGroup.GetComponent<RectTransform>();
+        if (originalPanelPos == Vector2.zero)
+            originalPanelPos = panelTransform.anchoredPosition;
         Vector2 hiddenPos = new Vector2(originalPanelPos.x, originalPanelPos.y - easeDistance);
+        Debug.Log(originalPanelPos.y + easeDistance);
         panelTransform.anchoredPosition = hiddenPos;
+        dialoguePanelGroup.alpha = 1;
         panelTransform.DOAnchorPos(originalPanelPos, easeDuration).SetEase(easeType);
     }
 
@@ -118,7 +120,8 @@ public class DialogueManager : MonoBehaviour
 
     private void EndDialogue()
     {
-        
+        //characterPortraitManager.ClearCharacterPortraits();
+        //characterManager.ClearCharacters();
         SceneManager.LoadScene("Game");
     }
 
@@ -145,12 +148,16 @@ public class DialogueManager : MonoBehaviour
                         characterPortraitManager.LoadPortrait(currentCharacter.characterImage, tagParam);
                     break;
                 case "speak":
-                    if (tagParam != "mc" && tagParam != currentSpeaker)
-                    {
+                    Debug.Log("Speak");
+                    bool isMC = tagParam == "mc";
+                    bool isSameSpeaker = tagParam == currentSpeaker;
+                    if (isSameSpeaker) //To prevent focus from being triggered at the same char
+                        break;
+                    if (!string.IsNullOrEmpty(currentSpeaker)) //To Prevent Easing to be disturbed by unfocusing
                         characterPortraitManager.UnfocusAll();
+                    if (!isMC) //MC doesn't have a portrait
                         characterPortraitManager.FocusPortrait(currentCharacter.characterImage, tagParam);
-                        currentSpeaker = tagParam;
-                    }
+                    currentSpeaker = tagParam;
                     characterNameText.text = currentCharacter.characterName;
                     break;
                 default:
