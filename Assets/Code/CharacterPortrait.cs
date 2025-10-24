@@ -26,7 +26,6 @@ public class CharacterPortrait : MonoBehaviour
     {
         yield return null; //Wait for one frame
         originalPos = rectTransform.anchoredPosition;
-        Debug.Log(originalPos);
     }
 
     public void SetPortrait(Sprite characterSprite)
@@ -56,19 +55,19 @@ public class CharacterPortrait : MonoBehaviour
 
     public void Ease(float easeDistance, float easeDuration,  float easeDelay, float unfocusStrength)
     {
+        Debug.Log("Eased");
         Vector2 startPos = originalPos + new Vector2(easeDistance, 0);
         rectTransform.anchoredPosition = startPos;
 
         Color startColor = characterImage.color;
         startColor.a = 0;
         characterImage.color = startColor;
-        Debug.Log(characterImage.color.a);
         Color targetColor = new Color(originalColor.r * unfocusStrength,
                                 originalColor.g * unfocusStrength,
                                 originalColor.b * unfocusStrength);
 
         Sequence seq = DOTween.Sequence();
         seq.Append(rectTransform.DOAnchorPos(originalPos, easeDuration));
-        //seq.Join(characterImage.DOColor(targetColor, easeDuration)).SetDelay(easeDelay);
+        seq.Join(characterImage.DOColor(targetColor, easeDuration)).SetDelay(easeDelay);
     }
 }

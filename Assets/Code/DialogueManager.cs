@@ -84,7 +84,6 @@ public class DialogueManager : MonoBehaviour
 
     private void EaseInDialoguePanel()
     {
-        Debug.Log("Eased In!");
         LayoutRebuilder.ForceRebuildLayoutImmediate(dialoguePanel.GetComponent<RectTransform>()); //from ChatGPT lol
         dialoguePanel.SetActive(true);
         RectTransform panelTransform = dialoguePanel.GetComponent<RectTransform>();
@@ -119,8 +118,7 @@ public class DialogueManager : MonoBehaviour
 
     private void EndDialogue()
     {
-        characterPortraitManager.ClearPortrait();
-        dialoguePanel.SetActive(false);
+        
         SceneManager.LoadScene("Game");
     }
 
@@ -147,13 +145,12 @@ public class DialogueManager : MonoBehaviour
                         characterPortraitManager.LoadPortrait(currentCharacter.characterImage, tagParam);
                     break;
                 case "speak":
-                    if (tagParam != currentSpeaker)
+                    if (tagParam != "mc" && tagParam != currentSpeaker)
                     {
                         characterPortraitManager.UnfocusAll();
-                        if (tagParam != "mc")
-                            characterPortraitManager.FocusPortrait(currentCharacter.characterImage, tagParam);
+                        characterPortraitManager.FocusPortrait(currentCharacter.characterImage, tagParam);
+                        currentSpeaker = tagParam;
                     }
-                    currentSpeaker = tagParam;
                     characterNameText.text = currentCharacter.characterName;
                     break;
                 default:
