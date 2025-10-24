@@ -61,33 +61,25 @@ public class DialogueManager : MonoBehaviour
         inputActions.Player.Disable();
     }
 
-    public void StartDialogue(TextAsset inkFile, Sprite background, float delay) 
+    public void LoadCutscene(Cutscene currentCutscene) // Plays in VNManager OnSceneLoaded
     {
-        currentInkFile = inkFile;
-        backgroundImage.sprite = background;
-        
-        // Use the delay from the Cutscene object
-        StartCoroutine(StartAfterDelay(delay));
+        currentInkFile = currentCutscene.inkFile;
+        backgroundImage.sprite = currentCutscene.backgroundImage;
+        StartCoroutine(StartAfterDelay(currentCutscene.introDelay));
     }
-    
 
     IEnumerator StartAfterDelay(float seconds)
     {
         yield return new WaitForSeconds(seconds);
-        SetupStory(); // Only set up the story object
-        EaseInDialoguePanel();
-        
-        // IMPORTANT: Start the dialogue flow immediately after easing in, 
-        // without relying on an extra 'E' press.
-        HandleDialogue(); 
+        SetupDialogue();
+        HandleDialogue();
     }
 
-    private void SetupStory() 
+    private void SetupDialogue()
     {
         story = new Story(currentInkFile.text);
         tags = new List<string>();
-        currentSpeaker = "";
-        // Note: The CharacterPortraitManager should also reset state here if it's not persistent
+        EaseInDialoguePanel();
     }
 
     private void EaseInDialoguePanel()
