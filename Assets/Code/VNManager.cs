@@ -31,12 +31,26 @@ public class VNManager : MonoBehaviour
         }
     }
 
+    // In VNManager.cs
+
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         if (SceneManager.GetActiveScene().name == "VN")
         {
             FindManager();
-            dialogueManager.LoadCutscene(currentCutscene);
+            if (dialogueManager && currentCutscene)
+            {
+                // Call the new public method on the DialogueManager
+                dialogueManager.StartDialogue(
+                    currentCutscene.inkFile,
+                    currentCutscene.backgroundImage,
+                    currentCutscene.introDelay
+                );
+            }
+            else
+            {
+                Debug.LogError("Missing DialogueManager or currentCutscene on VN scene load.");
+            }
         }
-    } 
+}
 }
