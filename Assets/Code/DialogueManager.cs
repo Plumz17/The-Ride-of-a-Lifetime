@@ -124,6 +124,7 @@ public class DialogueManager : MonoBehaviour
 
     private void EndDialogue()
     {
+        //characterPortraitManager.UnloadAllPortrait();
         SceneManager.LoadScene("Game");
     }
 
@@ -164,6 +165,10 @@ public class DialogueManager : MonoBehaviour
                     currentSpeaker = tagParam;
                     characterNameText.text = currentCharacter.characterName;
                     break;
+                case "leave":
+                    characterPortraitManager.UnloadPortrait(tagParam);
+                    break;
+
                 default:
                     Debug.Log("Tag Not Found 404");
                     break;

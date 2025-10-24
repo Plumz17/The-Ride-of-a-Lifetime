@@ -28,9 +28,14 @@ public class CharacterPortrait : MonoBehaviour
         originalPos = rectTransform.anchoredPosition;
     }
 
-    public void SetPortrait(Sprite characterSprite)
+    public void LoadSprite(Sprite characterSprite)
     {
         characterImage.sprite = characterSprite;
+    }
+
+    public void UnloadSprite()
+    {
+        characterImage.sprite = null;
     }
 
     public void Unfocus(float unfocusStrength)
@@ -53,7 +58,7 @@ public class CharacterPortrait : MonoBehaviour
         characterImage.rectTransform.DOScale(targetScale, 0.2f);
     }
 
-    public void Ease(float easeDistance, float easeDuration,  float easeDelay, float unfocusStrength)
+    public void EaseIn(float easeDistance, float easeDuration, float easeDelay, float unfocusStrength)
     {
         Vector2 startPos = originalPos + new Vector2(easeDistance, 0);
         rectTransform.anchoredPosition = startPos;
@@ -68,5 +73,17 @@ public class CharacterPortrait : MonoBehaviour
         Sequence seq = DOTween.Sequence();
         seq.Append(rectTransform.DOAnchorPos(originalPos, easeDuration));
         seq.Join(characterImage.DOColor(targetColor, easeDuration)).SetDelay(easeDelay);
+    }
+    
+    public void EaseOut(float easeDistance, float easeDuration,  float easeDelay)
+    {
+        Vector2 endPos = originalPos - new Vector2(easeDistance, 0);
+
+        Color endColor = characterImage.color;
+        endColor.a = 0;
+
+        Sequence seq = DOTween.Sequence();
+        seq.Append(characterImage.DOColor(endColor, easeDuration));
+        seq.Join(rectTransform.DOAnchorPos(endPos, easeDuration)).SetDelay(easeDelay);
     }
 }

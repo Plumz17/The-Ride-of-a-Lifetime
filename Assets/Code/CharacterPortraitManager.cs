@@ -5,6 +5,7 @@ using DG.Tweening;
 using Ink.Parsed;
 using UnityEditor.SceneManagement;
 using System.Linq;
+using System.Collections;
 
 
 public class CharacterPortraitManager : MonoBehaviour
@@ -47,10 +48,37 @@ public class CharacterPortraitManager : MonoBehaviour
         noOfCharacters++;
         CharacterPortrait currrentPortrait = characterPortraits[noOfCharacters - 1].GetComponent<CharacterPortrait>();
         currrentPortrait.gameObject.SetActive(true);
-        currrentPortrait.SetPortrait(characterSprite);
-        currrentPortrait.Ease(easeDistance, easeDuration, easeDelay, unfocusStrength);
+        currrentPortrait.LoadSprite(characterSprite);
+        currrentPortrait.EaseIn(easeDistance, easeDuration, easeDelay, unfocusStrength);
         activePortraits.Add(id, currrentPortrait);
     }
+
+    public void UnloadPortrait(string id)
+    {
+        StartCoroutine(UnloadPortraitCoroutine(id));
+    }
+
+    private IEnumerator UnloadPortraitCoroutine(string id)
+    {   
+        noOfCharacters--;
+        CharacterPortrait currentPortrait = activePortraits[id].GetComponent<CharacterPortrait>();
+        activePortraits.Remove(id);
+        currentPortrait.EaseOut(easeDistance, easeDuration, easeDelay);
+        yield return new WaitForSeconds(easeDuration + easeDelay);
+        currentPortrait.gameObject.SetActive(false);
+        currentPortrait.UnloadSprite();
+    }
+
+    // public void UnloadAllPortrait()
+    // {
+    //     foreach (GameObject cp in characterPortraits)
+    //     {
+    //         CharacterPortrait currentCP = cp.GetComponent<CharacterPortrait>();
+    //         currentCP.EaseOut(easeDistance, easeDuration, easeDelay);
+    //     }
+    //     noOfCharacters = 0;
+    //     activePortraits.Clear();
+    // }
 
     public void FocusPortrait(Sprite characterSpirte, string id)
     {

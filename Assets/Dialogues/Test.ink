@@ -40,10 +40,10 @@ Welcome to... what is this place, again?
 That’s for later. For now—
 Stay calm.
 
+#leave:winter
 #speak:avery
 Stay entertained, you mean!
 
 #speak:mc
-Uhh... sure...
 TO BE CONTINUED
 -> END
