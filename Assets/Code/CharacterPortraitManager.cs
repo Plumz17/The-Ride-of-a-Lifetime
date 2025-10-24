@@ -46,6 +46,11 @@ public class CharacterPortraitManager : MonoBehaviour
         activePortraits.Add(id, currrentPortrait);
     }
 
+    public void ClearPortrait()
+    {
+        activePortraits.Clear();
+    }
+
     public void FocusPortrait(Sprite characterSpirte, string id)
     {
         CharacterPortrait currrentPortrait = activePortraits[id].GetComponent<CharacterPortrait>();
