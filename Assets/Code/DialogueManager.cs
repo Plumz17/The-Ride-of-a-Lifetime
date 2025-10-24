@@ -139,18 +139,8 @@ public class DialogueManager : MonoBehaviour
         tags = story.currentTags;
         foreach (string s in tags)
         {
-            string[] parts = s.Split(':');
-
-            // Check if the tag has the expected "tagname:tagparam" format
-            if (parts.Length < 2)
-            {
-                Debug.LogWarning($"Skipping malformed Ink tag: {s}");
-                continue; // Skip to the next tag
-            }
-
-            string tagName = parts[0];
-            string tagParam = parts[1]; 
-            
+            string tagName = s.Split(":")[0];
+            string tagParam = s.Split(":")[1];
             Character currentCharacter = characterManager.GetCharacterData(tagParam);
             bool isMC = tagParam == "mc";
 
