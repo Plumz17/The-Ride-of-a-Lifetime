@@ -31,6 +31,10 @@ public class DialogueManager : MonoBehaviour
     [Header("Dialogue Settings")]
     [SerializeField] private float dialogueSpeed = 0.05f;
 
+    [Header("Choices Manager")]
+    [SerializeField] private GameObject choicesGroup;
+    [SerializeField] private Button[] choicesOptions;
+
     [Header("Character Manager")]
     [SerializeField] private CharacterManager characterManager;
     [SerializeField] private CharacterPortraitManager characterPortraitManager;
@@ -43,7 +47,7 @@ public class DialogueManager : MonoBehaviour
 
     private InputActions inputActions;
 
-    private Story story;
+    public Story story;
     private List<string> tags;
     private bool isTyping = false;
     private Coroutine TypingCoroutine;
@@ -56,13 +60,13 @@ public class DialogueManager : MonoBehaviour
 
     private void OnEnable()
     {
-        inputActions.Player.Interact.started += OnEPressed;
+        inputActions.Player.Interact.started += OnButtonPressed;
         inputActions.Player.Enable();
     }
 
     private void OnDisable()
     {
-        inputActions.Player.Interact.started -= OnEPressed;
+        inputActions.Player.Interact.started -= OnButtonPressed;
         inputActions.Player.Disable();
     }
 
@@ -117,19 +121,19 @@ public class DialogueManager : MonoBehaviour
         panelTransform.DOAnchorPos(originalPanelPos, easeDuration).SetEase(easeType);
     }
 
-    private void OnEPressed(InputAction.CallbackContext context)
+    private void OnButtonPressed(InputAction.CallbackContext context)
     {
         HandleDialogue();
     }
 
-    private void HandleDialogue()
+    private void HandleDialogue() //Start a Dialogue
     {
         if (story == null)
         {
             Debug.LogWarning("HandleDialogue called before story was initialized!");
             return;
         }
-        
+
         if (isTyping)
         {
             CompleteSentence();
@@ -139,11 +143,37 @@ public class DialogueManager : MonoBehaviour
         if (story.canContinue && !isTyping)
         {
             AdvanceDialogue();
+            return;
         }
-        else
+
+        if (story.currentChoices.Count > 0)
         {
-            SlideClosing();
+            HandleChoices();
+            return;
         }
+
+        SlideClosing();
+    }
+
+    private void HandleChoices()
+    {
+        dialogueText.text = "";
+        int noOfChoices = story.currentChoices.Count;
+        choicesGroup.SetActive(true);
+        for (int i = 0; i < noOfChoices; i++)
+        {
+            Choice currentChoice = story.currentChoices[i];
+            choicesOptions[i].gameObject.SetActive(true);
+            choicesOptions[i].GetComponent<TMP_Text>().text = currentChoice.text;
+        }
+        return;
+    }
+
+    public void OnChoiceSelected(int index)
+    {
+        story.ChooseChoiceIndex(index);
+        choicesGroup.SetActive(false);
+        HandleDialogue();
     }
 
     private void EndDialogue()
@@ -153,9 +183,29 @@ public class DialogueManager : MonoBehaviour
 
     private void AdvanceDialogue()
     {
-        string currentSentence = story.Continue();
-        HandleTags();
-        TypingCoroutine = StartCoroutine(TypeSentence(currentSentence));
+        //Skip blank lines
+        while (story.canContinue)
+        {
+            string currentSentence = story.Continue();
+            HandleTags();
+
+            if (!string.IsNullOrWhiteSpace(currentSentence))
+            {
+                TypingCoroutine = StartCoroutine(TypeSentence(currentSentence));
+                return;
+            }
+            //If line is blank, will skip dialogue
+        }
+
+        //If no lines but choices exist, show choices
+        if (story.currentChoices.Count > 0)
+        {
+            HandleChoices();
+            return;
+        }
+
+        //If no lines or choices exist, end
+        SlideClosing();
     }
 
     private void HandleTags()
