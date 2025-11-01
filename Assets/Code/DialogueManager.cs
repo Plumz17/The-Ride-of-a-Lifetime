@@ -52,6 +52,7 @@ public class DialogueManager : MonoBehaviour
     private bool isTyping = false;
     private Coroutine TypingCoroutine;
     private string currentSpeaker = "";
+    private int noOfChoices;
 
     void Awake()
     {
@@ -158,8 +159,10 @@ public class DialogueManager : MonoBehaviour
     private void HandleChoices()
     {
         dialogueText.text = "";
-        int noOfChoices = story.currentChoices.Count;
-        choicesGroup.SetActive(true);
+        noOfChoices = story.currentChoices.Count;
+        Sequence seq = DOTween.Sequence();
+        seq.Append(choicesGroup.transform.DOScale(new Vector2(1, 1), 0.08f).SetEase(Ease.InBounce));
+        seq.Join(choicesGroup.GetComponent<CanvasGroup>().DOFade(1f, 0.1f));
         for (int i = 0; i < noOfChoices; i++)
         {
             Choice currentChoice = story.currentChoices[i];
@@ -172,7 +175,8 @@ public class DialogueManager : MonoBehaviour
     public void OnChoiceSelected(int index)
     {
         story.ChooseChoiceIndex(index);
-        choicesGroup.SetActive(false);
+        choicesGroup.transform.position = new Vector2(0, 0);
+        choicesGroup.GetComponent<CanvasGroup>().alpha = 0;
         HandleDialogue();
     }
 

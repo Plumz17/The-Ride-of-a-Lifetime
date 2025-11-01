@@ -1,8 +1,8 @@
 using DG.Tweening;
 using DG.Tweening.Core.Easing;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class ChoiceButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
@@ -11,6 +11,12 @@ public class ChoiceButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     [SerializeField] private float highlightSpeed = 0.15f;
     [SerializeField] private Ease highlightEase;
     private Vector2 originalScale;
+    private CanvasGroup canvasGroup;
+
+    void Awake()
+    {
+        canvasGroup = GetComponent<CanvasGroup>();   
+    }
 
     void Start()
     {
@@ -24,7 +30,6 @@ public class ChoiceButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        Debug.Log("sdjbaihubciasb");
         transform.DOScale(originalScale * highlightScale, highlightSpeed).SetEase(highlightEase);
     }
 
