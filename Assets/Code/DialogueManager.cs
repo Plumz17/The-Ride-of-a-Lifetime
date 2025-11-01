@@ -221,7 +221,6 @@ public class DialogueManager : MonoBehaviour
             switch (tagName.ToLower())
             {
                 case "show":
-                    Debug.Log(tagParam + " showed!");
                     if (!isMC)
                     {
                         characterPortraitManager.LoadPortrait(currentCharacter.characterImage, tagParam);

@@ -25,10 +25,6 @@ public class VNManager : MonoBehaviour
     private void FindManager()
     {
         dialogueManager = FindFirstObjectByType<DialogueManager>();
-        if (dialogueManager)
-        {
-            Debug.Log("Dialogue Manager Found!");
-        }
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)

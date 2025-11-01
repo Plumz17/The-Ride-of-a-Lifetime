@@ -171,6 +171,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialogueManager: {fileID: 1665137478}
+  highlightScale: 1.15
+  highlightSpeed: 0.15
+  highlightEase: 6
 --- !u!114 &277587149
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -378,6 +381,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialogueManager: {fileID: 1665137478}
+  highlightScale: 1.15
+  highlightSpeed: 0.15
+  highlightEase: 6
 --- !u!114 &419993529
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1609,6 +1615,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialogueManager: {fileID: 1665137478}
+  highlightScale: 1.15
+  highlightSpeed: 0.15
+  highlightEase: 6
 --- !u!114 &1388444408
 MonoBehaviour:
   m_ObjectHideFlags: 0

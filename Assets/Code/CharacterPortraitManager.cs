@@ -28,7 +28,6 @@ public class CharacterPortraitManager : MonoBehaviour
 
     void Awake()
     {
-        Debug.Log(noOfCharacters);
         activePortraits = new Dictionary<string, CharacterPortrait>();
         noOfCharacters = 0;
     }
