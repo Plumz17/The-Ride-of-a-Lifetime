@@ -7,7 +7,6 @@ using System;
 using UnityEditor.IMGUI.Controls;
 using System.Collections;
 using NUnit.Framework;
-using Unity.VisualScripting;
 using UnityEngine.UI;
 using DG.Tweening;
 using UnityEngine.SceneManagement;
@@ -35,6 +34,12 @@ public class DialogueManager : MonoBehaviour
     [Header("Character Manager")]
     [SerializeField] private CharacterManager characterManager;
     [SerializeField] private CharacterPortraitManager characterPortraitManager;
+
+    [Header("Sliding Manager")]
+    [SerializeField] private RectTransform leftBox;
+    [SerializeField] private RectTransform rightBox;
+    [SerializeField] private float slideDistance = 960;
+    [SerializeField] private float slideDuration = 0.5f;
 
     private InputActions inputActions;
 
@@ -71,8 +76,27 @@ public class DialogueManager : MonoBehaviour
     IEnumerator StartAfterDelay(float seconds)
     {
         yield return new WaitForSeconds(seconds);
+        SlideOpen();
         SetupDialogue();
         HandleDialogue();
+    }
+
+    private void SlideOpen()
+    {
+        Vector2 newLeftPos = new Vector2(leftBox.localPosition.x - slideDistance, leftBox.localPosition.y);
+        Vector2 newRightPos = new Vector2(rightBox.localPosition.x + slideDistance, rightBox.localPosition.y);
+        Sequence seq = DOTween.Sequence();
+        seq.Append(leftBox.DOAnchorPos(newLeftPos, slideDuration));
+        seq.Join(rightBox.DOAnchorPos(newRightPos, slideDuration));
+    }
+
+    private void SlideClosing()
+    {
+        Vector2 newLeftPos = new Vector2(leftBox.localPosition.x + slideDistance, leftBox.localPosition.y);
+        Vector2 newRightPos = new Vector2(rightBox.localPosition.x - slideDistance, rightBox.localPosition.y);
+        Sequence seq = DOTween.Sequence();
+        seq.Append(leftBox.DOAnchorPos(newLeftPos, slideDuration));
+        seq.Join(rightBox.DOAnchorPos(newRightPos, slideDuration)).OnComplete(EndDialogue);
     }
 
     private void SetupDialogue()
@@ -118,13 +142,12 @@ public class DialogueManager : MonoBehaviour
         }
         else
         {
-            EndDialogue();
+            SlideClosing();
         }
     }
 
     private void EndDialogue()
     {
-        //characterPortraitManager.UnloadAllPortrait();
         SceneManager.LoadScene("Game");
     }
 
